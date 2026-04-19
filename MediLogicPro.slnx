@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="MediLogic.Data/MediLogic.Data.csproj" />
+  <Project Path="MediLogic.Logic/MediLogic.Logic.csproj" />
+  <Project Path="MediLogic.Models/MediLogic.Models.csproj" />
+  <Project Path="MediLogic.Security/MediLogic.Security.csproj" />
+  <Project Path="MediLogicPro/MediLogicPro.csproj" />
+</Solution>
