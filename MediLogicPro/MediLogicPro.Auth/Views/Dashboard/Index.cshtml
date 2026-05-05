@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+    <h1 style="margin-top: 0;">Welcome to MediLogicPro Hybrid Dashboard</h1>
+    <p style="color: #64748b; line-height: 1.6;">
+        This is the central MVC shell. You can access the different modules from the sidebar:
+    </p>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px;">
+        <div style="border: 1px solid #e2e8f0; padding: 24px; border-radius: 8px;">
+            <h3 style="color: #0c63e4;">Administrative Setup</h3>
+            <p>Master data management, user settings, and branch configuration.</p>
+            <span style="background: #eff6ff; color: #1d4ed8; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">REACT 19 SPA</span>
+            <div style="margin-top: 20px;">
+                <a href="/setup" style="display: inline-block; background: #0c63e4; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;">Launch Setup</a>
+            </div>
+        </div>
+        
+        <div style="border: 1px solid #e2e8f0; padding: 24px; border-radius: 8px;">
+            <h3 style="color: #059669;">POS & Inventory</h3>
+            <p>High-concurrency sales operations, real-time stock tracking, and returns.</p>
+            <span style="background: #ecfdf5; color: #047857; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">ANGULAR 18 SPA</span>
+            <div style="margin-top: 20px;">
+                <a href="/angular" style="display: inline-block; background: #059669; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;">Open POS</a>
+            </div>
+        </div>
+    </div>
+</div>

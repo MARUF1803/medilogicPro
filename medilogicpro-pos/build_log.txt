@@ -1,0 +1,145 @@
+
+> medilogicpro-pos@0.0.0 build
+> ng build
+
+[33m>[39m Building...
+[32m√[39m Building...
+[1mInitial chunk files[22m  [2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mchunk-7QKS7G3R.js[39m    [2m | [22m[2m-[22m                         [2m | [22m[36m174.70 kB[39m[2m | [22m               [36m50.22 kB[39m
+[32mchunk-QWMYROXO.js[39m    [2m | [22m[2m-[22m                         [2m | [22m [36m88.87 kB[39m[2m | [22m               [36m22.10 kB[39m
+[32mpolyfills-FFHMD2TL.js[39m[2m | [22m[2mpolyfills[22m                 [2m | [22m [36m34.52 kB[39m[2m | [22m               [36m11.28 kB[39m
+[32mchunk-RHBVYFZV.js[39m    [2m | [22m[2m-[22m                         [2m | [22m [36m28.68 kB[39m[2m | [22m                [36m6.11 kB[39m
+[32mmain-FUOR3M3J.js[39m     [2m | [22m[2mmain[22m                      [2m | [22m [36m22.30 kB[39m[2m | [22m                [36m5.67 kB[39m
+[32mstyles-7IQTTLSG.css[39m  [2m | [22m[2mstyles[22m                    [2m | [22m [36m18.61 kB[39m[2m | [22m                [36m2.38 kB[39m
+[32mchunk-FDERIQAA.js[39m    [2m | [22m[2m-[22m                         [2m | [22m  [36m1.11 kB[39m[2m | [22m              [36m514 bytes[39m
+[32mchunk-5DDSE74A.js[39m    [2m | [22m[2m-[22m                         [2m | [22m  [36m1.07 kB[39m[2m | [22m              [36m435 bytes[39m
+
+[1m [22m                    [2m | [22m[1mInitial total[22m             [2m | [22m[1m369.87 kB[22m[2m | [22m               [1m98.71 kB[22m
+
+[1mLazy chunk files[22m     [2m | [22m[1mNames[22m                     [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mchunk-INN6X5YQ.js[39m    [2m | [22m[2m-[22m                         [2m | [22m[36m445.77 kB[39m[2m | [22m              [36m122.19 kB[39m
+[32mchunk-SYZBSFR2.js[39m    [2m | [22m[2mhtml2canvas[22m               [2m | [22m[36m203.12 kB[39m[2m | [22m               [36m38.58 kB[39m
+[32mchunk-C2E2A42K.js[39m    [2m | [22m[2mindex-es[22m                  [2m | [22m[36m159.12 kB[39m[2m | [22m               [36m46.96 kB[39m
+[32mchunk-U72N65JW.js[39m    [2m | [22m[2mpurchase-history-component[22m[2m | [22m [36m38.96 kB[39m[2m | [22m                [36m9.08 kB[39m
+[32mchunk-SSN6MI7C.js[39m    [2m | [22m[2mpos-component[22m             [2m | [22m [36m27.17 kB[39m[2m | [22m                [36m6.59 kB[39m
+[32mchunk-4CBYU7O7.js[39m    [2m | [22m[2msales-history-component[22m   [2m | [22m [36m24.15 kB[39m[2m | [22m                [36m6.32 kB[39m
+[32mchunk-JWD5355V.js[39m    [2m | [22m[2mpurify-es[22m                 [2m | [22m [36m23.91 kB[39m[2m | [22m                [36m8.09 kB[39m
+[32mchunk-GT63H23N.js[39m    [2m | [22m[2msales-returns-component[22m   [2m | [22m [36m20.64 kB[39m[2m | [22m                [36m5.66 kB[39m
+[32mchunk-GE7R3LXW.js[39m    [2m | [22m[2mpurchase-returns-component[22m[2m | [22m [36m20.06 kB[39m[2m | [22m                [36m5.64 kB[39m
+[32mchunk-OFA2X5J4.js[39m    [2m | [22m[2minventory-component[22m       [2m | [22m [36m11.62 kB[39m[2m | [22m                [36m3.34 kB[39m
+[32mchunk-JI52WX2F.js[39m    [2m | [22m[2mreports-component[22m         [2m | [22m [36m11.38 kB[39m[2m | [22m                [36m3.13 kB[39m
+[32mchunk-2JB4L5XK.js[39m    [2m | [22m[2mparty-statement-component[22m [2m | [22m  [36m7.16 kB[39m[2m | [22m                [36m2.51 kB[39m
+[32mchunk-PJ2SXJXZ.js[39m    [2m | [22m[2mledger-component[22m          [2m | [22m  [36m2.82 kB[39m[2m | [22m                [36m1.21 kB[39m
+
+Application bundle generation complete. [3.582 seconds]
+
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mangular:styles/component:scss;b93fa580fff02d1f311e242ef57a997879c876b87b8b4ccf84a001dfb802b91f;E:/CoreAPI/medilogicpro-pos/src/app/shared/components/sidebar/sidebar.component.ts exceeded maximum budget. Budget 2.05 kB was not met by 324 bytes with a total of 2.37 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mangular:styles/component:scss;5b60984591369f721d994fe9726b3eb2ac96ddc8803043330e69976ba28130c8;E:/CoreAPI/medilogicpro-pos/src/app/shared/components/header/header.component.ts exceeded maximum budget. Budget 2.05 kB was not met by 276 bytes with a total of 2.32 kB.[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'core-js/modules/es.promise.js' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'core-js/modules/es.string.match.js' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'core-js/modules/es.string.replace.js' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'core-js/modules/es.string.starts-with.js' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'core-js/modules/es.array.iterator.js' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'core-js/modules/web.dom-collections.iterator.js' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'core-js/modules/es.array.reduce.js' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'core-js/modules/es.string.ends-with.js' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'core-js/modules/es.string.split.js' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'raf' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'core-js/modules/es.string.trim.js' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'rgbcolor' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'core-js/modules/es.array.index-of.js' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'core-js/modules/es.string.includes.js' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'core-js/modules/es.array.reverse.js' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'core-js/modules/es.regexp.to-string.js' used by 'node_modules/canvg/lib/index.es.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mModule 'html2canvas' used by 'node_modules/jspdf/dist/jspdf.es.min.js' is not ESM[0m
+
+  CommonJS or AMD dependencies can cause optimization bailouts.
+  For more information see: [4mhttps://angular.dev/tools/cli/build#configuring-commonjs-dependencies[0m
+
+[39m[22m
+Output location: E:\CoreAPI\medilogicpro-pos\dist\medilogicpro-pos
+

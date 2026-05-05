@@ -1,0 +1,20 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  MediLogic.Models -> e:\CoreAPI\MediLogicPro\MediLogic.Models\bin\Debug\net10.0\MediLogic.Models.dll
+  MediLogic.Data -> e:\CoreAPI\MediLogicPro\MediLogic.Data\bin\Debug\net10.0\MediLogic.Data.dll
+  MediLogic.Security -> e:\CoreAPI\MediLogicPro\MediLogic.Security\bin\Debug\net10.0\MediLogic.Security.dll
+  MediLogic.Logic -> e:\CoreAPI\MediLogicPro\MediLogic.Logic\bin\Debug\net10.0\MediLogic.Logic.dll
+e:\CoreAPI\MediLogicPro\MediLogicPro\Controllers\ReportController.cs(49,57): warning CS8602: Dereference of a possibly null reference. [e:\CoreAPI\MediLogicPro\MediLogicPro\MediLogicPro.csproj]
+e:\CoreAPI\MediLogicPro\MediLogicPro\Controllers\ReportController.cs(199,30): warning CS8602: Dereference of a possibly null reference. [e:\CoreAPI\MediLogicPro\MediLogicPro\MediLogicPro.csproj]
+e:\CoreAPI\MediLogicPro\MediLogicPro\Controllers\ReportController.cs(242,29): warning CS8602: Dereference of a possibly null reference. [e:\CoreAPI\MediLogicPro\MediLogicPro\MediLogicPro.csproj]
+  MediLogicPro -> e:\CoreAPI\MediLogicPro\MediLogicPro\bin\Debug\net10.0\MediLogicPro.dll
+
+Build succeeded.
+
+e:\CoreAPI\MediLogicPro\MediLogicPro\Controllers\ReportController.cs(49,57): warning CS8602: Dereference of a possibly null reference. [e:\CoreAPI\MediLogicPro\MediLogicPro\MediLogicPro.csproj]
+e:\CoreAPI\MediLogicPro\MediLogicPro\Controllers\ReportController.cs(199,30): warning CS8602: Dereference of a possibly null reference. [e:\CoreAPI\MediLogicPro\MediLogicPro\MediLogicPro.csproj]
+e:\CoreAPI\MediLogicPro\MediLogicPro\Controllers\ReportController.cs(242,29): warning CS8602: Dereference of a possibly null reference. [e:\CoreAPI\MediLogicPro\MediLogicPro\MediLogicPro.csproj]
+    3 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.76

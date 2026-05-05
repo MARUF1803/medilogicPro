@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MediLogic.Models\MediLogic.Models.csproj" />
+    <ProjectReference Include="..\MediLogic.Data\MediLogic.Data.csproj" />
+    <ProjectReference Include="..\MediLogic.Security\MediLogic.Security.csproj" />
+  </ItemGroup>
+
+</Project>

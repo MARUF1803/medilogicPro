@@ -1,0 +1,86 @@
+@model MediLogicPro.Auth.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Sign In";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<div class="auth-card animate-slide-up">
+    <!-- Logo & Brand -->
+    <div class="auth-brand">
+        <div class="brand-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
+                <path d="m8.5 8.5 7 7"/>
+            </svg>
+        </div>
+        <h1 class="brand-title">MediLogic<span class="brand-accent">Pro</span></h1>
+        <p class="brand-subtitle">Enterprise Pharmacy Management System</p>
+    </div>
+
+    <!-- Success Message -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span>@TempData["SuccessMessage"]</span>
+        </div>
+    }
+
+    <!-- Error Message -->
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-error">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            <span>@ViewBag.ErrorMessage</span>
+        </div>
+    }
+
+    <!-- Login Form -->
+    <form asp-action="Login" method="post" id="loginForm" class="auth-form">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+
+        <div class="form-group">
+            <div class="input-wrapper">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <input asp-for="UserName" class="form-input" placeholder="Username" autocomplete="username" autofocus />
+            </div>
+            <span asp-validation-for="UserName" class="field-error"></span>
+        </div>
+
+        <div class="form-group">
+            <div class="input-wrapper">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <input asp-for="Password" class="form-input" placeholder="Password" type="password" autocomplete="current-password" id="passwordInput" />
+                <button type="button" class="toggle-password" onclick="togglePassword()" tabindex="-1">
+                    <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+            </div>
+            <span asp-validation-for="Password" class="field-error"></span>
+        </div>
+
+        <div class="form-row">
+            <label class="checkbox-wrapper">
+                <input asp-for="RememberMe" type="checkbox" />
+                <span class="checkmark"></span>
+                <span class="checkbox-label">Remember me</span>
+            </label>
+            <a asp-action="ForgotPassword" class="link-subtle">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-primary" id="loginBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            <span>Sign In</span>
+            <div class="btn-loader" id="btnLoader"></div>
+        </button>
+    </form>
+
+    <div class="auth-footer">
+        <span>Don't have an account?</span>
+        <a asp-action="Register" class="link-accent">Create Account</a>
+    </div>
+
+    <div class="auth-legal">
+        By signing in, you agree to our Terms of Service.
+    </div>
+</div>

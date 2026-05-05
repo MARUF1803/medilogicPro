@@ -1,0 +1,8 @@
+Using launch settings from e:\CoreAPI\MediLogicPro\MediLogicPro\Properties\launchSettings.json...
+Building...
+e:\CoreAPI\MediLogicPro\MediLogicPro\Data\PharmaDataSeeder.cs(208,46): error CS0029: Cannot implicitly convert type 'System.DateTime' to 'System.DateOnly' [e:\CoreAPI\MediLogicPro\MediLogicPro\MediLogicPro.csproj]
+e:\CoreAPI\MediLogicPro\MediLogicPro\Controllers\ReportController.cs(49,57): warning CS8602: Dereference of a possibly null reference. [e:\CoreAPI\MediLogicPro\MediLogicPro\MediLogicPro.csproj]
+e:\CoreAPI\MediLogicPro\MediLogicPro\Controllers\ReportController.cs(199,30): warning CS8602: Dereference of a possibly null reference. [e:\CoreAPI\MediLogicPro\MediLogicPro\MediLogicPro.csproj]
+e:\CoreAPI\MediLogicPro\MediLogicPro\Controllers\ReportController.cs(242,29): warning CS8602: Dereference of a possibly null reference. [e:\CoreAPI\MediLogicPro\MediLogicPro\MediLogicPro.csproj]
+
+The build failed. Fix the build errors and run again.

@@ -1,0 +1,37 @@
+Using project 'e:\CoreAPI\MediLogicPro\MediLogic.Data\MediLogic.Data.csproj'.
+Using startup project 'e:\CoreAPI\MediLogicPro\MediLogicPro\MediLogicPro.csproj'.
+dotnet msbuild /getProperty:ProjectName /getProperty:AssemblyName /getProperty:DesignAssembly /getProperty:Language /getProperty:OutputPath /getProperty:PlatformTarget /getProperty:ProjectAssetsFile /getProperty:ProjectDir /getProperty:RootNamespace /getProperty:RuntimeFrameworkVersion /getProperty:TargetFileName /getProperty:TargetFrameworkMoniker /getProperty:Nullable /getProperty:TargetFramework /getProperty:TargetPlatformIdentifier /getProperty:Platform /t:ResolvePackageAssets /getItem:RuntimeCopyLocalItems e:\CoreAPI\MediLogicPro\MediLogic.Data\MediLogic.Data.csproj
+dotnet msbuild /getProperty:ProjectName /getProperty:AssemblyName /getProperty:DesignAssembly /getProperty:Language /getProperty:OutputPath /getProperty:PlatformTarget /getProperty:ProjectAssetsFile /getProperty:ProjectDir /getProperty:RootNamespace /getProperty:RuntimeFrameworkVersion /getProperty:TargetFileName /getProperty:TargetFrameworkMoniker /getProperty:Nullable /getProperty:TargetFramework /getProperty:TargetPlatformIdentifier /getProperty:Platform /t:ResolvePackageAssets /getItem:RuntimeCopyLocalItems e:\CoreAPI\MediLogicPro\MediLogicPro\MediLogicPro.csproj
+Build started...
+dotnet build e:\CoreAPI\MediLogicPro\MediLogicPro\MediLogicPro.csproj /verbosity:quiet /nologo /p:PublishAot=false
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.76
+
+Build succeeded.
+dotnet exec --depsfile e:\CoreAPI\MediLogicPro\MediLogicPro\bin\Debug\net10.0\MediLogicPro.deps.json --additionalprobingpath C:\Users\HP\.nuget\packages --additionalprobingpath "C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages" --runtimeconfig e:\CoreAPI\MediLogicPro\MediLogicPro\bin\Debug\net10.0\MediLogicPro.runtimeconfig.json C:\Users\HP\.dotnet\tools\.store\dotnet-ef\10.0.2\dotnet-ef\10.0.2\tools\net8.0\any\tools\net8.0\any\ef.dll database update --assembly e:\CoreAPI\MediLogicPro\MediLogicPro\bin\Debug\net10.0\MediLogic.Data.dll --project e:\CoreAPI\MediLogicPro\MediLogic.Data\MediLogic.Data.csproj --startup-assembly e:\CoreAPI\MediLogicPro\MediLogicPro\bin\Debug\net10.0\MediLogicPro.dll --startup-project e:\CoreAPI\MediLogicPro\MediLogicPro\MediLogicPro.csproj --project-dir e:\CoreAPI\MediLogicPro\MediLogic.Data\ --root-namespace MediLogic.Data --language C# --framework net10.0 --design-assembly C:\Users\HP\.nuget\packages\microsoft.entityframeworkcore.design\10.0.3\lib\net10.0\Microsoft.EntityFrameworkCore.Design.dll --nullable --working-dir E:\CoreAPI\MediLogicPro\MediLogicPro --verbose
+Using assembly 'MediLogic.Data'.
+Using startup assembly 'MediLogicPro'.
+Using application base 'e:\CoreAPI\MediLogicPro\MediLogicPro\bin\Debug\net10.0'.
+Using working directory 'e:\CoreAPI\MediLogicPro\MediLogicPro'.
+Using root namespace 'MediLogic.Data'.
+Using project directory 'e:\CoreAPI\MediLogicPro\MediLogic.Data\'.
+Remaining arguments: .
+The Entity Framework tools version '10.0.2' is older than that of the runtime '10.0.3'. Update the tools for the latest features and bug fixes. See https://aka.ms/AAc1fbw for more information.
+Microsoft.EntityFrameworkCore.Design.OperationException: Could not load assembly 'MediLogic.Data'. Ensure it is referenced by the startup project 'MediLogicPro'.
+ ---> System.IO.FileLoadException: Could not load file or assembly 'e:\CoreAPI\MediLogicPro\MediLogicPro\bin\Debug\net10.0\MediLogic.Data.dll'. An Application Control policy has blocked this file. (0x800711C7)
+File name: 'e:\CoreAPI\MediLogicPro\MediLogicPro\bin\Debug\net10.0\MediLogic.Data.dll'
+   at System.Reflection.RuntimeAssembly.InternalLoad(AssemblyName assemblyName, StackCrawlMark& stackMark, AssemblyLoadContext assemblyLoadContext, RuntimeAssembly requestingAssembly, Boolean throwOnFileNotFound)
+   at System.Reflection.Assembly.Load(AssemblyName assemblyRef)
+   at Microsoft.EntityFrameworkCore.Design.OperationExecutor.<get_Assembly>g__Create|16_0()
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Design.OperationExecutor.<get_Assembly>g__Create|16_0()
+   at Microsoft.EntityFrameworkCore.Design.OperationExecutor.get_Assembly()
+   at Microsoft.EntityFrameworkCore.Design.OperationExecutor.get_MigrationsOperations()
+   at Microsoft.EntityFrameworkCore.Design.OperationExecutor.UpdateDatabaseImpl(String targetMigration, String connectionString, String contextType)
+   at Microsoft.EntityFrameworkCore.Design.OperationExecutor.UpdateDatabase.<>c__DisplayClass0_0.<.ctor>b__0()
+   at Microsoft.EntityFrameworkCore.Design.OperationExecutor.OperationBase.Execute(Action action)
+Could not load assembly 'MediLogic.Data'. Ensure it is referenced by the startup project 'MediLogicPro'.
