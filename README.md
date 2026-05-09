@@ -28,7 +28,8 @@ MediLogicPro is a robust, full-stack enterprise resource planning (ERP) system d
 
 ## 🛠️ Tech Stack
 
-- **Backend:** ASP.NET Core 10 Web API, Entity Framework Core (EF Core)
+- **Backend API:** ASP.NET Core 10 Web API, Entity Framework Core (EF Core)
+- **Identity Server:** ASP.NET Core MVC (Dedicated Auth Tier)
 - **Database:** Microsoft SQL Server
 - **Authentication:** JWT (JSON Web Token) with Role-Based Access Control (RBAC)
 - **Frontend (POS):** Angular 19, RxJS, PrimeNG/TailwindCSS
@@ -39,14 +40,14 @@ MediLogicPro is a robust, full-stack enterprise resource planning (ERP) system d
 
 ## 🏗️ Architecture
 
-The system follows a modular, clean architecture pattern:
-- **MediLogicPro.Auth:** Handles identity and security.
-- **MediLogicPro.Data:** EF Core DBContext and Data models.
-- **MediLogicPro.Logic:** Business logic and service layers.
+The system follows a **Decoupled Modular Architecture**:
+- **MediLogicPro.Auth:** Dedicated ASP.NET Core MVC server for identity management, user lifecycle, and security token issuance.
+- **MediLogicPro.Data:** Centralized EF Core DBContext and Data models shared across tiers.
+- **MediLogicPro.Logic:** Encapsulated business logic and service layers.
 - **MediLogicPro.Models:** Shared DTOs and entity models.
-- **Hybrid Frontend:** 
-  - `/medilogicpro-pos`: Angular-based high-speed transaction hub.
-  - `/medilogicpro-frontend`: React-based administrative control hub.
+- **Hybrid Frontend Ecosystem:** 
+  - `/medilogicpro-pos`: Angular-based high-speed transaction hub for operational staff.
+  - `/medilogicpro-frontend`: React-based administrative dashboard for management.
 
 ---
 
