@@ -1,0 +1,10 @@
+/* Dashboard styles are managed globally in styles.scss for theme consistency */
+.leaderboard .border-bottom:last-child {
+  border-bottom: none;
+}
+
+.red-zone-list {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+}

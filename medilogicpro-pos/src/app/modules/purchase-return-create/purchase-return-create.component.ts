@@ -117,10 +117,12 @@ export class PurchaseReturnCreateComponent {
   searchPurchase() {
     if (!this.purchaseNo) return;
     this.loading = true;
+    const cleanNo = this.purchaseNo.replace('#', '').trim();
+    
     this.api.get<any[]>(`Purchase`).subscribe({
       next: (data) => {
-        const found = data.find(p => p.purchaseNo === this.purchaseNo);
-        if (!found) { alert('Purchase not found'); this.loading = false; return; }
+        const found = data.find(p => p.purchaseNo.toLowerCase() === cleanNo.toLowerCase());
+        if (!found) { alert('Purchase not found: ' + cleanNo); this.loading = false; return; }
         this.purchase = found;
         this.returnDetails = (found.purchaseDetails || []).map((d: any) => ({ ...d, maxReturn: (d.quantity || 0) - (d.returnedQuantity || 0), returnQuantity: 0 }));
         this.loading = false;

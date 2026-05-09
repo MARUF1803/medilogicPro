@@ -58,7 +58,7 @@ namespace MediLogic.Logic.Services
                     d.UnitPrice,
                     d.ExpiryDate
                 }),
-                Payments = p.PurchasePayments
+                purchasePayments = p.PurchasePayments
             });
         }
         
@@ -97,7 +97,7 @@ namespace MediLogic.Logic.Services
                     d.UnitPrice,
                     d.ExpiryDate
                 }),
-                Payments = p.PurchasePayments
+                purchasePayments = p.PurchasePayments
             };
         }
 
@@ -154,7 +154,7 @@ namespace MediLogic.Logic.Services
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await transaction.RollbackAsync();
                 throw;

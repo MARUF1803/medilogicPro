@@ -85,9 +85,26 @@ public class AccountController : Controller
             var authPayload = JsonSerializer.Serialize(authResult, serializeOptions);
             var encodedAuth = Convert.ToBase64String(Encoding.UTF8.GetBytes(authPayload));
 
-            // Determine redirect destination (Always go through auth-callback)
+            // Determine default redirect destination based on roles
             var callbackUrl = GetCallbackUrl(authResult.Roles);
             
+            // Check if request came specifically from one of the apps via Referer
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                var referer = Request.Headers["Referer"].ToString();
+                var setupBase = _config["FrontendUrls:ReactSetup"] ?? "http://localhost:5173";
+                var angularBase = _config["FrontendUrls:AngularPOS"] ?? "http://localhost:4200";
+                
+                if (referer.Contains("4200") || returnUrl.Contains("4200"))
+                {
+                    callbackUrl = angularBase.TrimEnd('/') + "/auth-callback";
+                }
+                else if (referer.Contains("5173") || returnUrl.Contains("5173"))
+                {
+                    callbackUrl = setupBase.TrimEnd('/') + "/auth-callback";
+                }
+            }
+
             // Append auth data and returnUrl to the callback URL
             var finalUrl = Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString(callbackUrl, new Dictionary<string, string?>
             {

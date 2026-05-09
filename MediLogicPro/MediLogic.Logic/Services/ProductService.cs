@@ -34,7 +34,7 @@ namespace MediLogic.Logic.Services
             return products.Select(p => new
             {
                 ProductId = p.ProductId,
-                ProductName = p.ProductName,
+                ProductName = p.ProductName ?? "Unknown Product",
                 ProductCode = p.ProductCode,
                 Strength = p.Strength,
                 Mrp = p.SalePrice, // Mapping SalePrice to MRP for POS
@@ -73,7 +73,7 @@ namespace MediLogic.Logic.Services
 
             // Check if product with same name/generic/strength already exists globally
             var existing = (await _repo.GetAllAsync()).FirstOrDefault(p => 
-                p.ProductName.Equals(product.ProductName, StringComparison.OrdinalIgnoreCase) && 
+                (p.ProductName ?? "").Equals(product.ProductName ?? "", StringComparison.OrdinalIgnoreCase) && 
                 (p.GenericName ?? "").Equals(product.GenericName ?? "", StringComparison.OrdinalIgnoreCase) &&
                 (p.Strength ?? "").Equals(product.Strength ?? "", StringComparison.OrdinalIgnoreCase)
             );
@@ -100,5 +100,24 @@ namespace MediLogic.Logic.Services
             await _repo.UpdateAsync(product);
         }
         public async Task DeleteProductAsync(int id) => await _repo.DeleteAsync(id);
+
+        public async Task<object?> GetProductByBarcodeAsync(string barcode, int branchId)
+        {
+            var product = (await _repo.GetAllAsync()).FirstOrDefault(p => p.ProductCode == barcode);
+            if (product == null) return null;
+
+            return new
+            {
+                ProductId = product.ProductId,
+                ProductName = product.ProductName,
+                ProductCode = product.ProductCode,
+                Strength = product.Strength,
+                Mrp = product.SalePrice,
+                CategoryName = product.Category?.CategoryName,
+                TotalStock = product.BatchStocks?
+                    .Where(bs => bs.BranchId == branchId)
+                    .Sum(bs => (decimal?)bs.CurrentBalance) ?? 0m
+            };
+        }
     }
 }

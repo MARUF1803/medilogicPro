@@ -28,6 +28,7 @@ public partial class SalesMaster
     public string? PaymentStatus { get; set; } = "Paid"; // Paid, Pending, Failed
     public string? PaymentMode { get; set; } = "Manual"; // Manual, API
     public decimal? ChangeAmount { get; set; }
+    public string? PrescriptionFilePath { get; set; }
 
     public virtual Branch? Branch { get; set; }
 

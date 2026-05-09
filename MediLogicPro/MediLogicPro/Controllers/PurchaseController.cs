@@ -36,7 +36,14 @@ namespace MediLogicPro.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                var msg = ex.Message;
+                var inner = ex.InnerException;
+                while (inner != null)
+                {
+                    msg = inner.Message;
+                    inner = inner.InnerException;
+                }
+                return BadRequest(new { message = msg });
             }
         }
 

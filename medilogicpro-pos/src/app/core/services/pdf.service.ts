@@ -55,7 +55,8 @@ export class PdfService {
       doc.setFontSize(10);
       doc.setTextColor(0, 0, 0);
       doc.text(`Doc No: ${invoiceNo}`, 14, 45);
-      doc.text(`Date: ${date ? new Date(date).toLocaleDateString() : 'N/A'}`, 14, 50);
+      const timeStr = date ? new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+      doc.text(`Date: ${date ? new Date(date).toLocaleDateString() : 'N/A'}${timeStr ? `    Time: ${timeStr}` : ''}`, 14, 50);
       doc.text(`Party: ${partyName}`, 14, 55);
 
       // Items Table
@@ -70,14 +71,13 @@ export class PdfService {
           (item.batchNumber === 'N/A' || !item.batchNumber) ? '-' : item.batchNumber,
           qty,
           `Tk. ${price.toFixed(2)}`,
-          retQty,
           `Tk. ${subtotal.toFixed(2)}`
         ];
       });
 
       autoTable(doc, {
         startY: 65,
-        head: [['Product', 'Batch', 'Qty', 'Rate', 'Ret. Qty', 'Subtotal']],
+        head: [['Product', 'Batch', 'Qty', 'Rate', 'Subtotal']],
         body: tableData,
         theme: 'striped',
         headStyles: { 
@@ -91,7 +91,7 @@ export class PdfService {
       const netAmount = data.netAmount || totalAmount || 0;
 
       // Aligned Totals Area (Right Aligned Values)
-      const labelX = 140;
+      const labelX = 125;
       const valueX = 190;
 
       doc.setFontSize(10);
@@ -111,14 +111,14 @@ export class PdfService {
         const recon = this.calc.getReconciliation(data);
         
         doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
+        doc.setFont('helvetica', 'bold');
         doc.text(`Total Paid:`, labelX, finalY + 22);
         doc.text(`Tk. ${recon.paidAmount.toFixed(2)}`, valueX, finalY + 22, { align: 'right' });
 
         if (recon.isFullyPaid) {
           doc.setTextColor(22, 163, 74); // Green
           doc.setFont('helvetica', 'bold');
-          doc.text(`Change Returned:`, labelX, finalY + 30);
+          doc.text(`Returned Amount:`, labelX, finalY + 30);
           doc.text(`Tk. ${recon.changeReturned.toFixed(2)}`, valueX, finalY + 30, { align: 'right' });
           doc.text(`Status: FULLY PAID`, 105, finalY + 40, { align: 'center' });
         } else {
@@ -136,13 +136,20 @@ export class PdfService {
           doc.setFontSize(10);
           doc.setTextColor(220, 38, 38);
           doc.setFont('helvetica', 'bold');
-          doc.text(`Final Ledger Balance:`, labelX, finalY + 44);
+          doc.text(`Final Balance:`, labelX, finalY + 44);
           doc.text(`Tk. ${recon.finalBalance.toFixed(2)}`, valueX, finalY + 44, { align: 'right' });
         }
 
         doc.setTextColor(0, 0, 0);
         doc.setFont('helvetica', 'normal');
       }
+
+      // FOOTER (Minimalist)
+      const pageHeight = doc.internal.pageSize.height || doc.internal.pageSize.getHeight();
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(50, 50, 50);
+      doc.text("Thank you, Stay with MediLogicPro", 105, pageHeight - 15, { align: 'center' });
 
       // Finalize and Print
       doc.autoPrint();

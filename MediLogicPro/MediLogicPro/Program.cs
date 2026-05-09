@@ -31,6 +31,7 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.JsonSerializerOptions.WriteIndented = true;
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     });
 
 // 2. Database Connection
@@ -67,6 +68,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
+builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
 
 // Security Services
 builder.Services.AddScoped<AuthService>();
@@ -113,6 +115,7 @@ app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseStaticFiles(); // Added to serve prescription images
 app.MapControllers();
 
 // 6. Seed Data (Sales, Product, Customer, User, Inventory)
@@ -130,7 +133,8 @@ using (var scope = app.Services.CreateScope())
         var sqlFixes = new[] {
             "IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Party') AND name = 'CreditBalance') ALTER TABLE Party ADD CreditBalance decimal(18,2) DEFAULT 0;",
             "IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('SalesDetail') AND name = 'ReturnedQuantity') ALTER TABLE SalesDetail ADD ReturnedQuantity decimal(18,2) DEFAULT 0;",
-            "IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('PurchaseDetail') AND name = 'ReturnedQuantity') ALTER TABLE PurchaseDetail ADD ReturnedQuantity decimal(18,2) DEFAULT 0;"
+            "IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('PurchaseDetail') AND name = 'ReturnedQuantity') ALTER TABLE PurchaseDetail ADD ReturnedQuantity decimal(18,2) DEFAULT 0;",
+            "IF NOT EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('SalesMaster') AND name = 'PrescriptionFilePath') ALTER TABLE SalesMaster ADD PrescriptionFilePath nvarchar(max);"
         };
 
         foreach (var sql in sqlFixes)

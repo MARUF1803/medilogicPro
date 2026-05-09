@@ -20,8 +20,8 @@ export class CalculationService {
     if (!paidAmount && (data.salesPayments || data.SalesPayments)) {
       const payments = data.salesPayments || data.SalesPayments;
       paidAmount = payments.reduce((s: number, p: any) => s + Number(p.amount || p.Amount || 0), 0);
-    } else if (!paidAmount && (data.purchasePayments || data.PurchasePayments)) {
-      const payments = data.purchasePayments || data.PurchasePayments;
+    } else if (!paidAmount && (data.purchasePayments || data.PurchasePayments || data.payments || data.Payments)) {
+      const payments = data.purchasePayments || data.PurchasePayments || data.payments || data.Payments;
       paidAmount = payments.reduce((s: number, p: any) => s + Number(p.amount || p.Amount || 0), 0);
     }
 

@@ -8,7 +8,7 @@ namespace MediLogic.Data.Repositories
     public class PurchaseRepository : IPurchaseRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly IBatchStockRepository _batchStockRepo; // New Dependency Injection
+        private readonly IBatchStockRepository _batchStockRepo;
 
         public PurchaseRepository(ApplicationDbContext context, IBatchStockRepository batchStockRepo)
         {
@@ -21,50 +21,34 @@ namespace MediLogic.Data.Repositories
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // 1. Duplicate Invoice Check
-                bool exists = await _context.PurchaseMasters
-                    .AnyAsync(p => p.PurchaseNo == purchase.PurchaseNo && p.SupplierId == purchase.SupplierId);
-
-                if (exists) throw new Exception("Duplicate Purchase Invoice Number for this supplier.");
-
-                purchase.PurchaseDate = DateTime.Now;
-                purchase.Discount ??= 0;
-                if (purchase.NetAmount == null || purchase.NetAmount == 0)
-                {
-                    purchase.NetAmount = purchase.TotalAmount - (purchase.Discount ?? 0);
-                }
-
+                // 1. Initial Setup & Validation
                 if (string.IsNullOrEmpty(purchase.PurchaseNo))
                 {
                     purchase.PurchaseNo = "PO-" + DateTime.Now.ToString("yyyyMMddHHmmss");
                 }
+                purchase.PurchaseDate ??= DateTime.Now;
+                purchase.Discount ??= 0;
+                purchase.NetAmount ??= purchase.TotalAmount - (purchase.Discount ?? 0);
+                purchase.BranchId ??= 1;
+                purchase.ChangeAmount ??= 0;
 
-                // 2. Map root PaymentMethod to PurchasePayments if missing (e.g. from React UI)
-                if ((purchase.PurchasePayments == null || !purchase.PurchasePayments.Any()) && !string.IsNullOrEmpty(purchase.PaymentMethod) && purchase.PaymentMethod != "Pending")
+                if (!purchase.SupplierId.HasValue) throw new Exception("Supplier is required.");
+                var supplier = await _context.Parties.FindAsync(purchase.SupplierId);
+                if (supplier == null) throw new Exception("Supplier not found.");
+
+                // CRITICAL: Ensure Payments collection is not empty before tracking
+                decimal totalPaidInput = 0m;
+                if (purchase.PurchasePayments != null)
                 {
-                    purchase.PurchasePayments = new List<PurchasePayment>
-                    {
-                        new PurchasePayment
-                        {
-                            PaymentMethod = purchase.PaymentMethod,
-                            Amount = purchase.NetAmount ?? purchase.TotalAmount,
-                            PaymentStatus = "Paid",
-                            TransactionId = purchase.PaymentReference,
-                            PaymentDate = purchase.PurchaseDate ?? DateTime.Now
-                        }
-                    };
+                    totalPaidInput = purchase.PurchasePayments.Sum(p => p.Amount);
                 }
 
-                // 3. Save Purchase Master and Details
-                decimal totalPaid = purchase.PurchasePayments?.Sum(p => p.Amount) ?? 0m;
-                
-                // Determine Status (Calculated on-the-fly in UI since PurchaseMaster lacks PaymentStatus field)
-                // purchase.PaymentStatus = totalPaid >= purchase.TotalAmount ? "Paid" : (totalPaid > 0 ? "Partial" : "Pending");
-                
+                // 2. Save Master record (EF will handle Details and Payments navigation properties automatically)
                 await _context.PurchaseMasters.AddAsync(purchase);
+                // Save initially to get ID for Ledger references
                 await _context.SaveChangesAsync();
 
-                // 3. Update Inventory (BatchStock) for each item
+                // 3. Update Inventory (BatchStock)
                 foreach (var item in purchase.PurchaseDetails)
                 {
                     await _batchStockRepo.UpdateStockAsync(
@@ -78,131 +62,71 @@ namespace MediLogic.Data.Repositories
                     );
                 }
 
-                // 4. Create Ledger Entry for the Purchase itself (Liability)
-                var purchaseLedgerEntry = new Ledger
+                // 4. Create Ledger Entry for the Purchase itself (Total Liability)
+                var purchaseLedger = new Ledger
                 {
                     TransactionDate = DateTime.Now,
-                    TransactionType = "Purchase",
+                    TransactionType = "Purchase Invoice",
                     ReferenceNo = purchase.PurchaseNo,
-                    Debit = 0m, 
-                    Credit = purchase.NetAmount ?? purchase.TotalAmount, // Total liability after discount
-                    PartyId = purchase.SupplierId,
                     RelatedId = purchase.PurchaseId,
+                    Debit = 0m,
+                    Credit = purchase.NetAmount ?? purchase.TotalAmount,
+                    PartyId = purchase.SupplierId,
                     BranchId = purchase.BranchId,
-                    Description = $"Purchase Invoice: {purchase.PurchaseNo}"
+                    Description = $"Procurement Invoice: {purchase.PurchaseNo}"
                 };
-                await _context.Ledgers.AddAsync(purchaseLedgerEntry);
+                await _context.Ledgers.AddAsync(purchaseLedger);
 
-                // 4.1 Create Ledger Entries for each Payment Method
-                if (purchase.PurchasePayments != null)
+                // 5. Create Ledger Entries for each Payment
+                decimal totalPaidSaved = 0m;
+                if (purchase.PurchasePayments != null && purchase.PurchasePayments.Any())
                 {
                     foreach (var payment in purchase.PurchasePayments)
                     {
+                        totalPaidSaved += payment.Amount;
                         await _context.Ledgers.AddAsync(new Ledger
                         {
                             TransactionDate = DateTime.Now,
                             TransactionType = $"Purchase Payment - {payment.PaymentMethod}",
                             ReferenceNo = purchase.PurchaseNo,
+                            RelatedId = purchase.PurchaseId,
                             Debit = payment.Amount,
                             Credit = 0m,
                             PartyId = purchase.SupplierId,
-                            RelatedId = purchase.PurchaseId,
                             BranchId = purchase.BranchId,
                             Description = $"Payment via {payment.PaymentMethod}",
-                            PaymentStatus = "Paid",
-                            PaymentMode = purchase.PaymentMethod
+                            PaymentStatus = "Paid"
                         });
                     }
                 }
 
-                // 4.2 Create Ledger Entry for Change Return if any
-                if (purchase.ChangeAmount > 0)
+                // 6. Handle Change Return (Supplier pays us back change)
+                decimal changeAmt = purchase.ChangeAmount ?? 0m;
+                if (changeAmt > 0)
                 {
                     await _context.Ledgers.AddAsync(new Ledger
                     {
                         TransactionDate = DateTime.Now,
-                        TransactionType = "Change Return - Supplier",
+                        TransactionType = "Change Return",
                         ReferenceNo = purchase.PurchaseNo,
-                        Debit = 0m,
-                        Credit = purchase.ChangeAmount ?? 0m, // Supplier gave us cash back
-                        PartyId = purchase.SupplierId,
                         RelatedId = purchase.PurchaseId,
+                        Debit = 0m,
+                        Credit = changeAmt,
+                        PartyId = purchase.SupplierId,
                         BranchId = purchase.BranchId,
-                        Description = $"Change Returned for Purchase: {purchase.PurchaseNo}"
+                        Description = $"Change received back for {purchase.PurchaseNo}"
                     });
                 }
 
-                // 5. Update Party Balance (Supplier)
-                if (purchase.SupplierId.HasValue)
-                {
-                    var supplier = await _context.Parties.FindAsync(purchase.SupplierId);
-                    if (supplier != null)
-                    {
-                        // Special case for Supplier Credit (Balance they gave us previously)
-                        var creditPayment = purchase.PurchasePayments?.FirstOrDefault(p => p.PaymentMethod == "Supplier Credit");
-                        if (creditPayment != null)
-                        {
-                            if ((supplier.CreditBalance ?? 0m) < creditPayment.Amount)
-                                throw new Exception("Insufficient Supplier Credit Balance.");
-                            
-                            supplier.CreditBalance -= creditPayment.Amount;
-                        }
-
-                        // Increase what we owe them by net amount, decrease by net exact amount paid
-                        decimal actualTotal = purchase.NetAmount ?? purchase.TotalAmount;
-                        supplier.CurrentBalance = (supplier.CurrentBalance ?? 0m) + actualTotal - (totalPaid - (purchase.ChangeAmount ?? 0m));
-
-                        // Automated Old Due Adjustment for Suppliers
-                        decimal surplus = totalPaid - purchase.TotalAmount;
-                        if (supplier.PartyType == "Supplier" && supplier.FullName?.ToLower() != "walking supplier" && surplus > 0)
-                        {
-                            var allPurchases = await _context.PurchaseMasters
-                                .Include(p => p.PurchasePayments)
-                                .Where(p => p.SupplierId == purchase.SupplierId && p.PurchaseId != purchase.PurchaseId)
-                                .OrderBy(p => p.PurchaseDate)
-                                .ToListAsync();
-
-                            var outstandingPurchases = allPurchases.Where(p => (p.PurchasePayments?.Sum(py => py.Amount) ?? 0m) < p.TotalAmount).ToList();
-
-                            foreach (var oldPurchase in outstandingPurchases)
-                            {
-                                if (surplus <= 0) break;
-
-                                decimal oldPurchasePaid = oldPurchase.PurchasePayments?.Sum(p => p.Amount) ?? 0m;
-                                decimal oldPurchaseDue = oldPurchase.TotalAmount - oldPurchasePaid;
-
-                                if (oldPurchaseDue > 0)
-                                {
-                                    decimal applyAmount = Math.Min(surplus, oldPurchaseDue);
-                                    
-                                    oldPurchase.PurchasePayments!.Add(new PurchasePayment
-                                    {
-                                        PurchaseId = oldPurchase.PurchaseId,
-                                        PaymentMethod = "Due Adjustment",
-                                        Amount = applyAmount,
-                                        PaymentMode = "System",
-                                        PaymentStatus = "Paid",
-                                        PaymentNote = $"Paid on {DateTime.Now:yyyy-MM-dd} via {purchase.PurchaseNo}",
-                                        PaymentDate = DateTime.Now
-                                    });
-
-                                    // Cross-reference on current invoice
-                                    purchase.PaymentReference = string.IsNullOrEmpty(purchase.PaymentReference)
-                                        ? $"Applied to Due: {oldPurchase.PurchaseNo} (৳{applyAmount})"
-                                        : $"{purchase.PaymentReference}, {oldPurchase.PurchaseNo} (৳{applyAmount})";
-
-                                    if (oldPurchasePaid + applyAmount >= oldPurchase.TotalAmount)
-                                    {
-                                        // Status is calculated on-the-fly in UI
-                                    }
-
-                                    surplus -= applyAmount;
-                                }
-                            }
-                        }
-                    }
-                }
+                // 7. Update Supplier Balance
+                // Net Amount = 2500, Total Paid = 500, Change = 0 -> Net Due = 2000
+                decimal netAmount = purchase.NetAmount ?? purchase.TotalAmount;
+                decimal actualPaidValue = totalPaidSaved - changeAmt;
                 
+                // Increase what we owe by net invoice, decrease by what we paid
+                supplier.CurrentBalance = (supplier.CurrentBalance ?? 0m) + (netAmount - actualPaidValue);
+
+                // 8. Final Commit
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
                 return purchase;
@@ -210,7 +134,8 @@ namespace MediLogic.Data.Repositories
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                throw new Exception(ex.Message);
+                var msg = ex.InnerException?.Message ?? ex.Message;
+                throw new Exception($"Purchase Error: {msg}");
             }
         }
 
@@ -219,8 +144,7 @@ namespace MediLogic.Data.Repositories
             return await _context.PurchaseMasters
                 .Include(p => p.Supplier)
                 .Include(p => p.Branch)
-                .Include(p => p.PurchaseDetails)
-                    .ThenInclude(d => d.Product)
+                .Include(p => p.PurchaseDetails).ThenInclude(d => d.Product)
                 .Include(p => p.PurchasePayments)
                 .ToListAsync();
         }
@@ -230,8 +154,7 @@ namespace MediLogic.Data.Repositories
             return (await _context.PurchaseMasters
                 .Include(p => p.Supplier)
                 .Include(p => p.Branch)
-                .Include(p => p.PurchaseDetails)
-                    .ThenInclude(d => d.Product)
+                .Include(p => p.PurchaseDetails).ThenInclude(d => d.Product)
                 .Include(p => p.PurchasePayments)
                 .FirstOrDefaultAsync(p => p.PurchaseId == id))!;
         }

@@ -184,9 +184,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.NetAmount).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.PaymentMethod).HasMaxLength(50);
-            entity.Property(e => e.PaymentReference).HasMaxLength(100);
-            entity.Property(e => e.PaymentProvider).HasMaxLength(100);
+            entity.Property(e => e.ChangeAmount).HasColumnType("decimal(18, 2)");
             entity.HasOne(d => d.Branch).WithMany(p => p.PurchaseMasters).HasForeignKey(d => d.BranchId).HasConstraintName("FK__PurchaseM__Branc__6C190EBB");
             entity.HasOne(d => d.Supplier).WithMany(p => p.PurchaseMasters).HasForeignKey(d => d.SupplierId).HasConstraintName("FK__PurchaseM__Suppl__6B24EA82");
         });
@@ -238,11 +236,10 @@ public partial class ApplicationDbContext : DbContext
         {
             entity.HasKey(e => e.SalesId).HasName("PK__SalesMas__C952FB32D57AA681");
             entity.ToTable("SalesMaster");
-            entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.InvoiceNo).HasMaxLength(100);
-            entity.Property(e => e.NetAmount).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.SalesDate).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.Discount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.NetAmount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.ChangeAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.PaymentMethod).HasMaxLength(50);
             entity.Property(e => e.PaymentReference).HasMaxLength(100);
             entity.Property(e => e.PaymentProvider).HasMaxLength(100);
@@ -364,6 +361,14 @@ public partial class ApplicationDbContext : DbContext
 
             entity.HasOne(d => d.Branch).WithMany(p => p.Ledgers).HasForeignKey(d => d.BranchId).HasConstraintName("FK__Ledger__BranchId__1DB06A4G");
             entity.HasOne(d => d.Party).WithMany(p => p.Ledgers).HasForeignKey(d => d.PartyId).HasConstraintName("FK__Ledger__PartyId__1DB06A4H");
+        });
+
+        modelBuilder.Entity<StockAdjustment>(entity =>
+        {
+            entity.HasKey(e => e.AdjustmentId);
+            entity.Property(e => e.AdjustedQuantity).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.BatchNumber).HasMaxLength(100);
+            entity.Property(e => e.Reason).HasMaxLength(100);
         });
 
         OnModelCreatingPartial(modelBuilder);

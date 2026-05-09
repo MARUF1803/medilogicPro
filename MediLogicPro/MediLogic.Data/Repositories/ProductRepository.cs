@@ -82,6 +82,9 @@ namespace MediLogic.Data.Repositories
                             (p.GenericName != null && p.GenericName.Contains(term))))
                 .Include(p => p.Category)
                 .Include(p => p.BatchStocks)
+                .OrderByDescending(p => p.ProductName == term) // Exact match first
+                .ThenByDescending(p => p.ProductName!.StartsWith(term)) // Starts with next
+                .ThenBy(p => p.ProductName) // Alphabetical last
                 .ToListAsync();
         }
     }

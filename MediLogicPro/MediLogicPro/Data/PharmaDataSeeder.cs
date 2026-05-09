@@ -217,12 +217,12 @@ namespace MediLogicPro.Data
                 foreach (var t in context.Taxes) { if (t.TaxCode != null) taxMap[t.TaxCode] = t; }
 
                 // --- 7. Seed Parties ---
-                var suppliers = new[] { "Square Pharma", "Beximco Pharma", "Incepta" };
+                var suppliers = new[] { "Square Pharma", "Beximco Pharma", "Incepta", "Walking Supplier" };
                 foreach (var s in suppliers)
                 {
                     if (!context.Parties.Any(p => p.FullName == s && p.PartyType == "Supplier"))
                     {
-                        context.Parties.Add(new Party { FullName = s, PartyType = "Supplier", PhoneNumber = "017", IsActive = true, BranchId = mainBranch.BranchId, CreatedAt = DateTime.Now });
+                        context.Parties.Add(new Party { FullName = s, PartyType = "Supplier", PhoneNumber = "000", IsActive = true, BranchId = mainBranch.BranchId, CreatedAt = DateTime.Now, CurrentBalance = 0, CreditBalance = 0 });
                     }
                 }
 

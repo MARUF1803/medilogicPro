@@ -72,13 +72,13 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
             <table class="luxury-pos-table">
               <thead>
                 <tr>
-                  <th style="width: 25%;">Product</th>
-                  <th style="width: 25%;">Batch/Expiry</th>
+                  <th>Product</th>
+                  <th>Batch/Expiry</th>
                   <th class="text-center">Cost</th>
                   <th class="text-center">MRP</th>
                   <th class="text-center">Qty</th>
                   <th class="text-right">Total</th>
-                  <th style="width: 60px;"></th>
+                  <th style="width: 40px;"></th>
                 </tr>
               </thead>
               <tbody>
@@ -89,31 +89,36 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
                         <div class="cart-item-code">ID: {{ item.productId }}</div>
                     </td>
                     <td>
-                      <div style="display: flex; flex-direction: column; gap: 8px; padding-right: 10px;">
-                        <input type="text" [(ngModel)]="item.batchNo" placeholder="BATCH NO" class="table-cell-input" style="width: 100%; height: 35px; font-size: 12px; text-transform: uppercase;" />
-                        <input type="date" [(ngModel)]="item.expiryDate" class="table-cell-input" style="width: 100%; height: 35px; font-size: 12px;" />
+                      <div style="display: flex; flex-direction: column; gap: 8px; padding-right: 5px;">
+                        <input type="text" [(ngModel)]="item.batchNo" placeholder="BATCH NO" class="table-cell-input" style="width: 100px; height: 35px; font-size: 11px; text-transform: uppercase;" />
+                        <input type="date" [(ngModel)]="item.expiryDate" class="table-cell-input" style="width: 110px; height: 35px; font-size: 11px;" />
                       </div>
                     </td>
                     <td>
                         <div class="table-input-wrapper">
-                            <span class="table-input-label">COST PRICE</span>
-                            <input type="number" [(ngModel)]="item.costPrice" (ngModelChange)="updateItem(item)" class="no-spinner table-cell-input" style="width: 80px;" />
+                            <span class="table-input-label">COST</span>
+                            <input type="number" [(ngModel)]="item.costPrice" (ngModelChange)="updateItem(item)" (wheel)="$event.preventDefault()" class="no-spinner table-cell-input" style="width: 65px;" />
                         </div>
                     </td>
                     <td>
                         <div class="table-input-wrapper">
                             <span class="table-input-label">M.R.P</span>
-                            <input type="number" [(ngModel)]="item.mrp" class="no-spinner table-cell-input" style="width: 80px;" />
+                            <input type="number" [(ngModel)]="item.mrp" (wheel)="$event.preventDefault()" class="no-spinner table-cell-input" style="width: 65px;" />
                         </div>
                     </td>
                     <td>
                         <div class="table-input-wrapper">
                             <span class="table-input-label">QTY</span>
-                            <input type="number" [(ngModel)]="item.quantity" (ngModelChange)="updateItem(item)" class="no-spinner table-cell-input qty-active" style="width: 80px;" />
+                            <input type="number" [(ngModel)]="item.quantity" (ngModelChange)="updateItem(item)" (wheel)="$event.preventDefault()" class="no-spinner table-cell-input qty-active" style="width: 65px;" />
                         </div>
                     </td>
-                    <td class="text-right">
-                        <div class="cart-item-total">{{ calc.formatCurrency(item.total) }}</div>
+                    <td class="text-right" style="padding-right: 15px;">
+                        <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                           <div style="font-size: 8px; font-weight: 950; color: #94a3b8; text-transform: uppercase;">Subtotal</div>
+                           <div class="cart-item-total" style="font-size: 18px; color: #0f172a;">
+                              <span style="color: #0ea5e9; font-size: 12px; margin-right: 2px;">Tk</span>{{ item.total.toLocaleString(undefined, { minimumFractionDigits: 2 }) }}
+                           </div>
+                        </div>
                     </td>
                     <td class="text-center">
                         <button class="btn-remove-item" (click)="removeItem(item.productId)">
@@ -165,6 +170,10 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
                 </div>
                 <button class="btn-add-circle" (click)="showSupplierAdd = true">+</button>
               </div>
+              <div style="margin-top: 15px; font-size: 11px; font-weight: 800; color: #94a3b8; display: flex; align-items: center; gap: 8px;">
+                 <span>WALKING SUPPLIER MODE</span>
+                 <span (click)="setWalkingSupplier()" style="color: #0ea5e9; cursor: pointer; text-decoration: underline; font-weight: 950;">SET PROFILE</span>
+              </div>
             } @else {
               <div class="selected-customer-pill animate-in">
                  <div class="cust-info">
@@ -208,7 +217,7 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
                          <option value="fixed">Tk</option>
                          <option value="percent">%</option>
                       </select>
-                      <input type="number" [(ngModel)]="discountValue" (ngModelChange)="updateItem()" class="no-spinner discount-value-input" />
+                      <input type="number" [(ngModel)]="discountValue" (ngModelChange)="updateItem()" (wheel)="$event.preventDefault()" class="no-spinner discount-value-input" />
                    </div>
                 </div>
                 
@@ -243,7 +252,7 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
                                <option value="Bank">BANK</option>
                             </select>
                         </div>
-                        <input type="number" [(ngModel)]="p.amount" (ngModelChange)="updateItem()" class="no-spinner payment-amount-field" />
+                        <input type="number" [(ngModel)]="p.amount" (ngModelChange)="updateItem()" (wheel)="$event.preventDefault()" class="no-spinner payment-amount-field" />
                         @if (payments.length > 1) {
                            <button class="btn-del-payment" (click)="removePayment($index)">&times;</button>
                         }
@@ -349,10 +358,10 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
     .item-price { font-size: 20px; font-weight: 950; color: #0ea5e9; }
 
     /* CART TABLE */
-    .cart-container { background: #fff; border-radius: 32px; overflow: hidden; min-height: 550px; }
-    .luxury-pos-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-    .luxury-pos-table th { background: #f8fafc; padding: 22px 28px; font-weight: 950; text-transform: uppercase; font-size: 11px; color: #94a3b8; letter-spacing: 2px; border-bottom: 2px solid #f1f5f9; text-align: left; }
-    .luxury-pos-table td { padding: 24px 28px; border-bottom: 1px solid #f8fafc; vertical-align: middle; }
+    .cart-container { background: #fff; border-radius: 32px; overflow-x: auto; min-height: 550px; }
+    .luxury-pos-table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 100%; }
+    .luxury-pos-table th { background: #f8fafc; padding: 14px 8px; font-weight: 950; text-transform: uppercase; font-size: 11px; color: #94a3b8; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9; text-align: left; }
+    .luxury-pos-table td { padding: 12px 8px; border-bottom: 1px solid #f8fafc; vertical-align: middle; }
     .cart-item-name { font-size: 18px; font-weight: 950; color: #0f172a; }
     .cart-item-code { font-size: 11px; font-weight: 800; color: #cbd5e1; text-transform: uppercase; margin-top: 2px; }
     .table-input-wrapper { display: flex; flex-direction: column; align-items: center; gap: 4px; }
@@ -362,7 +371,7 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
     .table-cell-input.qty-active { background: #f0f9ff; border-color: #bae6fd; color: #0369a1; font-weight: 950; height: 45px; }
     .no-spinner::-webkit-inner-spin-button, .no-spinner::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     .no-spinner { -moz-appearance: textfield; }
-    .cart-item-total { font-size: 20px; font-weight: 950; color: #0f172a; }
+    .cart-item-total { font-size: 20px; font-weight: 950; color: #0f172a; white-space: nowrap; }
     .btn-remove-item { background: #fff1f2; color: #f43f5e; border: none; width: 44px; height: 44px; border-radius: 14px; cursor: pointer; transition: all 0.2s; opacity: 0.3; }
     tr:hover .btn-remove-item { opacity: 1; }
     .btn-remove-item:hover { background: #f43f5e; color: #fff; transform: rotate(8deg); }
@@ -480,9 +489,34 @@ export class PurchaseCreateComponent implements OnInit {
 
   addToCart(product: any) {
     const existing = this.cart.find(i => i.productId === product.productId);
-    if (existing) { existing.quantity++; this.updateItem(existing); }
-    else { this.cart.push({ productId: product.productId, productName: product.productName, strength: product.strength, batchNo: '', expiryDate: '', costPrice: product.costPrice || 0, mrp: product.mrp || 0, quantity: 1, total: 0 }); }
-    this.searchResults = []; if (this.searchInput) this.searchInput.nativeElement.value = ''; this.updateItem();
+    if (existing) { 
+      existing.quantity++; 
+      this.updateItem(existing); 
+    }
+    else { 
+      const item = { productId: product.productId, productName: product.productName, strength: product.strength, batchNo: '', expiryDate: '', costPrice: product.costPrice || 0, mrp: product.mrp || 0, quantity: 1, total: 0 };
+      this.cart.push(item); 
+      this.updateItem(item);
+    }
+    this.searchResults = []; 
+    if (this.searchInput) this.searchInput.nativeElement.value = ''; 
+    this.updateItem();
+  }
+
+  setWalkingSupplier() {
+    this.api.get<any[]>('Party/Search/Walking').subscribe(res => {
+      const walking = res.find(p => p.partyType === 'Supplier');
+      if (walking) {
+        this.selectParty(walking);
+      } else {
+        // Auto-create if not found
+        const newWalking = { fullName: 'Walking Supplier', phoneNumber: '000', partyType: 'Supplier', branchId: this.branchService.activeBranchId() };
+        this.api.post<any>('Party', newWalking).subscribe({
+          next: (created) => this.selectParty(created),
+          error: () => alert('Could not create Walking Supplier profile.')
+        });
+      }
+    });
   }
 
   updateItem(item?: any) { 
@@ -490,7 +524,12 @@ export class PurchaseCreateComponent implements OnInit {
       item.quantity = Math.max(1, parseFloat(item.quantity as any) || 0); 
       item.costPrice = Math.max(0, parseFloat(item.costPrice as any) || 0); 
       item.total = item.quantity * item.costPrice; 
-    } 
+    } else {
+      // Update all items if none specified
+      this.cart.forEach(i => {
+        i.total = (i.quantity || 0) * (i.costPrice || 0);
+      });
+    }
     this.payments.forEach(p => {
         if (p.amount < 0) p.amount = 0;
     });
@@ -537,7 +576,7 @@ export class PurchaseCreateComponent implements OnInit {
                 this.resetCart(); 
             } 
         }, 
-        error: () => { this.submitting = false; alert('Error saving purchase'); } 
+        error: (err) => { this.submitting = false; alert(err.error?.message || err.error?.title || err.message || 'Error saving purchase'); } 
     });
   }
 

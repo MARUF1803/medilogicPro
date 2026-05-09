@@ -21,6 +21,9 @@ yarn-error.log*
 
 # Workspace Specific
 brain/
+*.env
+appsettings.json
+appsettings.*.json
 DemoProject.zip
 WebAPIProject.zip
 Aggregation/

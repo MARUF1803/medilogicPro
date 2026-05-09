@@ -21,8 +21,8 @@ const REACT_SETUP_URL = 'http://localhost:5173';
           </svg>
         </div>
         <div>
-          <h2 class="brand-title">MediLogic<span class="accent">Pro</span></h2>
-          <span class="brand-sub">POS Terminal</span>
+          <h2 class="brand-title"><span class="brand-main">MediLogic</span><span class="brand-accent">Pro</span></h2>
+          <span class="brand-sub">Point of Sale (POS)</span>
         </div>
       </div>
 
@@ -31,9 +31,9 @@ const REACT_SETUP_URL = 'http://localhost:5173';
         @if (auth.hasRole('Admin')) {
           <div class="nav-group">
             <span class="nav-group-title">Main Dashboard</span>
-            <a routerLink="/reports" routerLinkActive="active" class="nav-item">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-              <span>Executive Dashboard</span>
+            <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              <span>Dashboard</span>
             </a>
           </div>
         }
@@ -138,11 +138,12 @@ const REACT_SETUP_URL = 'http://localhost:5173';
     }
     .brand-icon {
       width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
-      background: var(--primary); box-shadow: 0 8px 16px rgba(12,99,228,0.2);
+      background: linear-gradient(135deg, #0077b6, #2d6a4f); box-shadow: 0 8px 16px rgba(0, 119, 182, 0.2);
     }
-    .brand-title { margin: 0; font-size: 18px; font-weight: 800; color: var(--text-main); letter-spacing: -0.03em; line-height: 1.2; }
-    .accent { color: #3b82f6; }
-    .brand-sub { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+    .brand-title { margin: 0; font-size: 20px; font-weight: 900; letter-spacing: -0.04em; line-height: 1.2; }
+    .brand-main { color: #00509d; }
+    .brand-accent { color: #70e000; }
+    .brand-sub { font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em; }
     .nav { flex: 1; padding: 12px; }
     .nav-group { margin-top: 8px; }
     .nav-group-title {
@@ -156,18 +157,20 @@ const REACT_SETUP_URL = 'http://localhost:5173';
       position: relative; overflow: hidden;
     }
     .nav-item:hover { 
-      background: rgba(12,99,228,0.05); 
-      color: var(--primary); 
+      background: rgba(0, 119, 182, 0.05); 
+      color: #0077b6; 
       transform: translateX(4px);
     }
     .nav-item.active {
-      background: rgba(12,99,228,0.1);
-      color: var(--primary); font-weight: 700;
-      box-shadow: none;
+      background: linear-gradient(135deg, rgba(0, 119, 182, 0.15), rgba(45, 106, 79, 0.1));
+      color: #0077b6; font-weight: 800;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 119, 182, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
     }
     .nav-item.active::before {
-      content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px;
-      background: var(--primary); border-radius: 0 4px 4px 0;
+      content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 5px;
+      background: linear-gradient(to bottom, #0077b6, #2d6a4f); border-radius: 0 4px 4px 0;
     }
     .setup-link {
       margin: 12px; padding: 14px; border-radius: 12px; cursor: pointer;

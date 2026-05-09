@@ -8,6 +8,7 @@ import { PdfService } from '../../core/services/pdf.service';
 import { CalculationService } from '../../core/services/calculation.service';
 import { Subject, debounceTime, switchMap, of } from 'rxjs';
 import { GlobalPreviewModalComponent } from '../../shared/components/global-preview-modal/global-preview-modal.component';
+import { AnalyticsService } from '../../core/services/analytics.service';
 
 @Component({
   selector: 'app-pos',
@@ -52,7 +53,7 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
               <div class="search-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="3"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
               </div>
-              <input #productInput type="text" class="main-search-input" placeholder="Search medicine name or scan barcode..." (input)="onSearchInput($event)" (keyup.enter)="addFirstProduct()" />
+              <input #productInput type="text" class="main-search-input" placeholder="Search medicine name or scan barcode..." (input)="onSearchInput($event)" (keyup.enter)="handleEnterKey($event)" />
             </div>
             
             @if (searchResults.length > 0) {
@@ -78,9 +79,9 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
               <thead>
                 <tr class="luxury-table-header">
                      <th style="padding-left: 24px; text-align: left;">Medicine Description</th>
-                     <th style="text-align: center;">Rate</th>
-                     <th style="text-align: center;">Qty</th>
-                     <th style="text-align: right;">Subtotal</th>
+                     <th style="text-align: center; width: 100px;">Rate</th>
+                     <th style="text-align: center; width: 100px;">Qty</th>
+                     <th style="text-align: right; width: 140px; padding-right: 24px;">Subtotal</th>
                      <th style="padding-right: 24px; width: 60px;"></th>
                 </tr>
               </thead>
@@ -100,10 +101,17 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
                     <td>
                         <div class="table-input-wrapper">
                             <span class="table-input-label">QTY</span>
-                            <input type="number" [(ngModel)]="item.quantity" (ngModelChange)="updateItem(item)" class="no-spinner table-cell-input qty-active" />
+                            <input type="number" [(ngModel)]="item.quantity" (ngModelChange)="updateItem(item)" (wheel)="$event.preventDefault()" class="no-spinner table-cell-input qty-active" />
                         </div>
                     </td>
-                    <td style="text-align: right; font-weight: 900; color: #0f172a; font-size: 16px;">{{ calc.formatCurrency(item.total) }}</td>
+                    <td style="text-align: right; padding-right: 24px;">
+                        <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                           <div style="font-size: 10px; font-weight: 900; color: #94a3b8; text-transform: uppercase; margin-bottom: 2px;">Subtotal</div>
+                           <div style="font-size: 18px; font-weight: 950; color: #0f172a; white-space: nowrap;">
+                              <span style="color: #0ea5e9; font-size: 13px; margin-right: 2px;">Tk</span> {{ item.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+                           </div>
+                        </div>
+                    </td>
                     <td style="padding-right: 24px; text-align: right;">
                         <button class="btn-del-luxury" (click)="removeItem(item.productId)">
                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
@@ -191,7 +199,7 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
                         <option value="fixed">Tk</option>
                         <option value="percent">%</option>
                      </select>
-                     <input type="number" [(ngModel)]="discountValue" (ngModelChange)="calculateNet()" class="no-spinner discount-value-input" />
+                     <input type="number" [(ngModel)]="discountValue" (ngModelChange)="calculateNet()" (wheel)="$event.preventDefault()" class="no-spinner discount-value-input" />
                   </div>
                </div>
 
@@ -202,6 +210,20 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
                   <div class="net-value">{{ calc.formatCurrency(netAmount) }}</div>
                </div>
                
+               <div class="divider-line"></div>
+
+               <!-- Prescription Attachment -->
+               <div class="prescription-section" style="margin-bottom: 16px;">
+                  <label style="font-size: 10px; font-weight: 950; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 3px; display: block; margin-bottom: 8px;">Prescription Attachment</label>
+                  <div class="flex items-center gap-2">
+                     <input type="file" #prescriptionInput style="display: none" (change)="onFileSelected($event)" accept="image/*,application/pdf" />
+                     <button type="button" class="btn-add-payment w-full" style="height: 40px; border-style: solid; background: rgba(255,255,255,0.05);" (click)="prescriptionInput.click()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        {{ prescriptionFile ? prescriptionFile.name : 'Click to Attach File' }}
+                     </button>
+                  </div>
+               </div>
+
                <div class="divider-line"></div>
             </div>
 
@@ -228,7 +250,7 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
                                <option value="Bank">BANK</option>
                             </select>
                         </div>
-                        <input type="number" [(ngModel)]="p.amount" (ngModelChange)="calculateNet()" class="no-spinner payment-amount-field" />
+                        <input type="number" [(ngModel)]="p.amount" (ngModelChange)="calculateNet()" (wheel)="$event.preventDefault()" class="no-spinner payment-amount-field" />
                         @if (payments.length > 1) {
                            <button class="btn-del-payment" (click)="removePayment($index)">&times;</button>
                         }
@@ -449,9 +471,10 @@ export class PosComponent implements OnInit {
   discountType: 'fixed' | 'percent' = 'fixed'; discountValue = 0; discountAmount = 0; payments: any[] = [{ method: 'Cash', amount: 0 }];
   submitting = false; Math = Math; showCustomerModal = false; showSuccessModal = false; lastSaleData: any = null;
   newCustomer = { fullName: '', phoneNumber: '', partyType: 'Customer' };
+  prescriptionFile: File | null = null;
   private searchSubject = new Subject<string>(); private partySearchSubject = new Subject<string>();
   
-  constructor(private api: ApiService, public branchService: BranchService, public pdf: PdfService, public calc: CalculationService) {}
+  constructor(private api: ApiService, public branchService: BranchService, public pdf: PdfService, public calc: CalculationService, private analytics: AnalyticsService) {}
   
   ngOnInit(): void {
     this.searchSubject.pipe(debounceTime(300), switchMap(t => t ? this.api.get<any[]>(`Product/SearchInventory/${t}/${this.branchService.activeBranchId()}`) : of([]))).subscribe(r => this.searchResults = r);
@@ -485,6 +508,28 @@ export class PosComponent implements OnInit {
 
   addFirstProduct() { if (this.searchResults.length > 0) this.addToCart(this.searchResults[0]); }
   
+  handleEnterKey(event: any) {
+    const value = event.target.value;
+    if (!value) return;
+
+    const branchId = this.branchService.activeBranchId() || 0;
+    this.analytics.getBarcodeProduct(value, branchId).subscribe({
+      next: (product) => {
+        if (product) {
+          this.addToCart(product);
+          event.target.value = '';
+        } else {
+          this.addFirstProduct();
+        }
+      },
+      error: () => this.addFirstProduct()
+    });
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) this.prescriptionFile = file;
+  }
   updateItem(item?: any) { 
     if (item) { 
         item.quantity = Math.max(1, parseFloat(item.quantity as any) || 0); 
@@ -510,7 +555,7 @@ export class PosComponent implements OnInit {
   addPaymentField() { const remaining = this.netAmount - this.paidAmount; this.payments.push({ method: 'Cash', amount: remaining > 0 ? remaining : 0 }); }
   removePayment(idx: number) { this.payments.splice(idx, 1); this.calculateNet(); }
   removeItem(id: number) { this.cart = this.cart.filter(i => i.productId !== id); this.calculateNet(); }
-  resetCart() { this.cart = []; this.selectedParty = null; this.discountValue = 0; this.payments = [{ method: 'Cash', amount: 0 }]; this.calculateNet(); }
+  resetCart() { this.cart = []; this.selectedParty = null; this.discountValue = 0; this.payments = [{ method: 'Cash', amount: 0 }]; this.prescriptionFile = null; this.calculateNet(); }
 
   selectParty(party: any) { 
     this.selectedParty = party; 
@@ -558,6 +603,11 @@ export class PosComponent implements OnInit {
             this.submitting = false; 
             const id = res.salesId || res.SalesId || res.id || res.Id; 
             if (id) { 
+                // Upload prescription if attached
+                if (this.prescriptionFile) {
+                  this.analytics.uploadPrescription(id, this.prescriptionFile).subscribe();
+                }
+
                 this.api.get<any>(`SalesHistory/${id}`).subscribe(sale => { 
                     this.lastSaleData = sale; 
                     this.showSuccessModal = true; 

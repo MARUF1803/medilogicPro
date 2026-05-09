@@ -295,7 +295,7 @@ namespace MediLogic.Logic.Services
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await transaction.RollbackAsync();
                 throw;
@@ -359,7 +359,7 @@ namespace MediLogic.Logic.Services
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await transaction.RollbackAsync();
                 throw;

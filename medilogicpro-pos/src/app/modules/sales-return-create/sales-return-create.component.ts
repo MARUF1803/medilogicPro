@@ -15,7 +15,7 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
     <div class="animate-in main-container" style="padding-bottom: 60px; padding-top: 20px;">
       
       <!-- Header -->
-      <div class="flex justify-between items-center mb-8 bg-white p-6 rounded-2xl shadow-sm border">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 bg-white p-6 rounded-2xl shadow-sm border">
         <div class="flex items-center gap-4">
            <div style="padding: 12px; background: rgba(244, 63, 94, 0.1); border-radius: 16px;">
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2.5"><path d="m15 18-6-6 6-6"/><path d="M3 12h18"/></svg>
@@ -25,12 +25,12 @@ import { GlobalPreviewModalComponent } from '../../shared/components/global-prev
               <p class="text-[10px] text-muted font-bold uppercase tracking-widest mt-1">Registry: Dhaka Main Branch</p>
            </div>
         </div>
-        <div class="flex gap-3">
-            <div class="relative">
-              <input type="text" [(ngModel)]="invoiceNo" (keyup.enter)="searchInvoice()" placeholder="Invoice No (e.g. INV-1)..." class="form-input h-14 pl-12 font-bold" style="width: 320px; border-radius: 16px; border: 2px solid #e2e8f0;" />
-              <div class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+        <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+            <div class="flex items-center px-4 h-14 bg-white w-full sm:w-[320px]" style="border-radius: 16px; border: 2px solid #e2e8f0;">
+              <div class="text-slate-400 mr-2 flex-shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
               </div>
+              <input type="text" [(ngModel)]="invoiceNo" (keyup.enter)="searchInvoice()" placeholder="Invoice No (e.g. INV-1)..." class="form-input font-bold w-full" style="border: none; outline: none; box-shadow: none; background: transparent; padding: 0;" />
             </div>
             <button class="btn-lookup" (click)="searchInvoice()" [disabled]="loading">Lookup Invoice</button>
         </div>

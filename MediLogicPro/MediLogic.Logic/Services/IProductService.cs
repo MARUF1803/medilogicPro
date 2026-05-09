@@ -13,5 +13,6 @@ namespace MediLogic.Logic.Services
 
         // NEW: Method definition for POS Search
         Task<IEnumerable<object>> SearchInventoryAsync(string term, int branchId);
+        Task<object?> GetProductByBarcodeAsync(string barcode, int branchId);
     }
 }

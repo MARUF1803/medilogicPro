@@ -52,7 +52,11 @@ export class AuthCallbackComponent implements OnInit {
             userName: decoded.userName,
             roles: decoded.roles || []
           });
-          this.router.navigate(['/pos'], { replaceUrl: true });
+          
+          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+          const targetUrl = returnUrl ? returnUrl : '/pos';
+          
+          this.router.navigateByUrl(targetUrl, { replaceUrl: true });
           return;
         }
       } catch (err) {
