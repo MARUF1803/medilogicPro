@@ -28,7 +28,7 @@ MediLogicPro is a robust, full-stack enterprise resource planning (ERP) system d
 
 ## 🛠️ Tech Stack
 
-- **Backend:** ASP.NET Core 8/9 Web API, Entity Framework Core (EF Core)
+- **Backend:** ASP.NET Core 10 Web API, Entity Framework Core (EF Core)
 - **Database:** Microsoft SQL Server
 - **Authentication:** JWT (JSON Web Token) with Role-Based Access Control (RBAC)
 - **Frontend (POS):** Angular 19, RxJS, PrimeNG/TailwindCSS
@@ -53,7 +53,7 @@ The system follows a modular, clean architecture pattern:
 ## 🔧 Installation & Setup
 
 1. **Prerequisites:**
-   - .NET 8 SDK or higher
+   - .NET 10 SDK or higher
    - Node.js (v18+)
    - SQL Server
 
